@@ -15,9 +15,28 @@ import pygame
 # Define some colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 480
+
+BLOCKS = 15
+BLOCK_WIDTH = 32
+BLOCK_HEIGHT = 32
 CAPTION_NAME = "Kim's Bomberman"
+SCREEN_WIDTH = BLOCKS * BLOCK_WIDTH
+SCREEN_HEIGHT = BLOCKS * BLOCK_HEIGHT
+SPRITE_SHEET0_BLOCK_WIDTH = 16
+SPRITE_SHEET0_BLOCK_HEIGHT = 16
+
+# 15x15(BLOCKSxBLOCKS) grid der verdiene = 0
+hard_block_grid = []
+# For hver rekke
+for row in range(BLOCKS):
+    # For each row, create a list that will
+    # represent an entire row
+    hard_block_grid.append([])
+    # Loop for each column
+    for column in range(BLOCKS):
+        # Add a the number zero to the current row
+        hard_block_grid[row].append(0)
+
 
 # Call this function so the Pygame library can initialize itself
 pygame.init()
@@ -41,8 +60,8 @@ background_position = [0, 0]
 
 SPRT_RECT_X = 71
 SPRT_RECT_Y = 175
-LEN_SPRT_X = 16
-LEN_SPRT_Y = 16
+LEN_SPRT_X = SPRITE_SHEET0_BLOCK_WIDTH
+LEN_SPRT_Y = SPRITE_SHEET0_BLOCK_HEIGHT
 bomberman_sheet = pygame.image.load("sprite_sheet0.png")
 bomberman_sheet.set_clip(pygame.Rect(SPRT_RECT_X, SPRT_RECT_Y, LEN_SPRT_X, LEN_SPRT_Y))
 hard_block = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
@@ -73,9 +92,16 @@ while not done:
 
     # Copy image to screen:
     screen.blit(player_image, [x, y])
-    screen.blit(hard_block, [0,0])
-    screen.blit(hard_block2x, [16,16])
-
+    screen.blit(hard_block2x, [0,0])
+    for column in range(BLOCKS):
+        for row in range(BLOCKS):
+            if column == 0 or column == BLOCKS-1:
+                screen.blit(hard_block2x, [column*BLOCK_WIDTH,row*BLOCK_HEIGHT])
+            elif row == 0 or row == BLOCKS-1:
+                screen.blit(hard_block2x, [column*BLOCK_WIDTH,row*BLOCK_HEIGHT])
+        for row in range(0, BLOCKS-1, 2):
+            if not (column % 2):
+                screen.blit(hard_block2x, [column*BLOCK_WIDTH,row*BLOCK_HEIGHT])
     pygame.display.flip()
 
     clock.tick(60)

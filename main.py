@@ -86,6 +86,7 @@ class Player(pygame.sprite.Sprite):
             frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
             frame.set_colorkey(GRAY)
             frame2x = pygame.transform.scale2x(frame)
+            frame2x.set_colorkey(GRAY)
             self.walking_frames_d.append(frame2x)
             # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
             if i == 2:
@@ -110,7 +111,7 @@ class Player(pygame.sprite.Sprite):
                 frame2x = pygame.transform.scale2x(frame)
                 self.walking_frames_l.append(frame2x)
         for i in range(6, 9):
-            sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+            sprite_sheet.set_clip(sheet_start_x + 2+ (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
             frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
             frame.set_colorkey(GRAY)
             frame2x = pygame.transform.scale2x(frame)
@@ -118,7 +119,7 @@ class Player(pygame.sprite.Sprite):
             # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
             if i == 8:
                 i= 7
-                sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+                sprite_sheet.set_clip(sheet_start_x + 2 + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
                 frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
                 frame.set_colorkey(GRAY)
                 frame2x = pygame.transform.scale2x(frame)
@@ -142,7 +143,6 @@ class Player(pygame.sprite.Sprite):
 
         #Set starting frame
         self.image = self.walking_frames_d[1]
-
 
         #Reference to frame rectangle
         self.rect = self.image.get_rect()

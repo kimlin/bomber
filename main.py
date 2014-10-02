@@ -24,21 +24,17 @@ BLOCK_HEIGHT = 32
 CAPTION_NAME = "Kim's Bomberman"
 SCREEN_WIDTH = BLOCKS * BLOCK_WIDTH
 SCREEN_HEIGHT = BLOCKS * BLOCK_HEIGHT
-#SpriteSheet
-SPRITE_SHEET0_BLOCK_WIDTH = 16
-SPRITE_SHEET0_BLOCK_HEIGHT = 16
-#Buildingblocks Sprites
-SPRITE_BLOCK_START = 71
-SPRITE_BLOCK_LOWER = 175
-SPRITE_MARGIN = 1
+#SpriteSheetBlock Width/Height/Margin
+SSBW = 16
+SSBH = 16
+SSM = 1
 
 # sprite sheet
-
-
-
 bomberman_sheet = pygame.image.load("sprite_sheet0.png")
 for i in range(4):
-    bomberman_sheet.set_clip(pygame.Rect(SPRITE_BLOCK_START + (SPRITE_SHEET0_BLOCK_WIDTH+SPRITE_MARGIN) * i, SPRITE_BLOCK_LOWER, SPRITE_SHEET0_BLOCK_WIDTH, SPRITE_SHEET0_BLOCK_HEIGHT))
+    SPRITE_BLOCK_START = 71
+    SPRITE_BLOCK_LOWER = 175
+    bomberman_sheet.set_clip(pygame.Rect(SPRITE_BLOCK_START + (SSBW+SSM) * i, SPRITE_BLOCK_LOWER, SSBW, SSBH))
     if i == 0:
         hard_block = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
         hard_block2x = pygame.transform.scale2x(hard_block)
@@ -51,7 +47,6 @@ for i in range(4):
     elif i == 3:
         field = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
         field2x = pygame.transform.scale2x(field)
-
 
 
 class HardBlock(pygame.sprite.Sprite):
@@ -69,6 +64,7 @@ class HardBlock(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
+
 class SoftBlock(pygame.sprite.Sprite):
 
     def __init__(self):
@@ -83,8 +79,6 @@ class SoftBlock(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
 
         self.rect = self.image.get_rect()
-
-
 
 
 # 15x15(BLOCKSxBLOCKS) grid der verdiene = 0, ikke i bruk til nå
@@ -181,9 +175,6 @@ background_position = [0, 0]
 # block_position = (71,175,16,16)
 
 
-
-
-
 # Load and set up graphics.
 player_image = pygame.image.load("player.png").convert()
 player_image.set_colorkey(BLACK)
@@ -201,9 +192,7 @@ while not done:
             print(column)
             print("Heavy block = ", grid[row][column])
 
-
     mouse_position = pygame.mouse.get_pos()
-
 
     '''
     mouse_position = pygame.mouse.get_pos()
@@ -214,17 +203,16 @@ while not done:
 
     for column in range(BLOCKS):
         column_area = 0 < column < BLOCKS-1
-        row_area = 0 < row < BLOCKS-1
-
         for row in range(BLOCKS):
-            if column == 1 and row_area :
-                screen.blit(field_shadow2x, [row*BLOCK_WIDTH,column*BLOCK_HEIGHT])
+            row_area = 0 < row < BLOCKS-1
+            if column == 1 and row_area:
+                screen.blit(field_shadow2x, [row * BLOCK_WIDTH, column * BLOCK_HEIGHT])
             else:
-                screen.blit(field2x, [row*BLOCK_WIDTH,column*BLOCK_HEIGHT])
+                screen.blit(field2x, [row * BLOCK_WIDTH, column * BLOCK_HEIGHT])
 
         for row in range(2, BLOCKS-1, 2):
-            if (column % 2) and column_area :
-                screen.blit(field_shadow2x, [row*BLOCK_WIDTH,column*BLOCK_HEIGHT])
+            if (column % 2) and column_area:
+                screen.blit(field_shadow2x, [row * BLOCK_WIDTH, column * BLOCK_HEIGHT])
 
     all_sprites_list.draw(screen)
     pygame.display.flip()

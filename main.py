@@ -63,6 +63,9 @@ class Player(pygame.sprite.Sprite):
 
     # Liste med de forskjellige bevegelses bildene, listen er tom nå:
     walking_frames_d = []
+    walking_frames_u = []
+    walking_frames_l = []
+    walking_frames_r = []
 
     # Hvilken vei ser spilleren når han starter? D= down
     direction = "D"
@@ -78,16 +81,67 @@ class Player(pygame.sprite.Sprite):
         sheet_margin = 1
         sprite_sheet = pygame.image.load("sprite_sheet0.png")
         # nå laster vi inn alle bildene der bomberman går nedover:
-        for i in range(3):
+        for i in range(0, 3):
             sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
             frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+            frame.set_colorkey(GRAY)
             frame2x = pygame.transform.scale2x(frame)
             self.walking_frames_d.append(frame2x)
+            # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
+            if i == 2:
+                i= 1
+                sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+                frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+                frame.set_colorkey(GRAY)
+                frame2x = pygame.transform.scale2x(frame)
+                self.walking_frames_d.append(frame2x)
+        for i in range(3, 6):
+            sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+            frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+            frame.set_colorkey(GRAY)
+            frame2x = pygame.transform.scale2x(frame)
+            self.walking_frames_l.append(frame2x)
+            # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
+            if i == 5:
+                i= 4
+                sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+                frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+                frame.set_colorkey(GRAY)
+                frame2x = pygame.transform.scale2x(frame)
+                self.walking_frames_l.append(frame2x)
+        for i in range(6, 9):
+            sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+            frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+            frame.set_colorkey(GRAY)
+            frame2x = pygame.transform.scale2x(frame)
+            self.walking_frames_r.append(frame2x)
+            # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
+            if i == 8:
+                i= 7
+                sprite_sheet.set_clip(sheet_start_x + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+                frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+                frame.set_colorkey(GRAY)
+                frame2x = pygame.transform.scale2x(frame)
+                self.walking_frames_r.append(frame2x)
+        for i in range(9, 12):
+            sprite_sheet.set_clip(sheet_start_x + 5 + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+            frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+            frame.set_colorkey(GRAY)
+            frame2x = pygame.transform.scale2x(frame)
+            self.walking_frames_u.append(frame2x)
+            # vi kan ikke gå 0,1,2,0,1,2 vi må gå 0,1,2,1,0,1,2
+            if i == 11:
+                i= 10
+                sprite_sheet.set_clip(sheet_start_x + 5 + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+                frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+                frame.set_colorkey(GRAY)
+                frame2x = pygame.transform.scale2x(frame)
+                self.walking_frames_u.append(frame2x)
+
+
 
         #Set starting frame
         self.image = self.walking_frames_d[1]
-        # Hides colorkey:
-        self.image.set_colorkey(GRAY)
 
 
         #Reference to frame rectangle
@@ -98,6 +152,45 @@ class Player(pygame.sprite.Sprite):
         print(type(self.image.get_rect()))
         print(self.rect)
 
+    def update(self):
+        self.rect.y += self.movement_y
+        self.rect.x += self.movement_x
+        pos = self.rect.y + self.rect.x
+        if self.direction == "D":
+            frame = (pos//30 ) % len(self.walking_frames_d)
+            self.image = self.walking_frames_d[frame]
+        elif self.direction == "L":
+            frame = (pos//30) % len(self.walking_frames_l)
+            self.image = self.walking_frames_l[frame]
+        elif self.direction == "R":
+            frame = (pos//30) % len(self.walking_frames_r)
+            self.image = self.walking_frames_r[frame]
+        elif self.direction == "U":
+            frame = (pos//30) % len(self.walking_frames_u)
+            self.image = self.walking_frames_u[frame]
+
+        self.rect.y += self.movement_y
+        self.rect.x += self.movement_x
+
+    def go_down(self):
+        self.movement_y = 1.5
+        self.direction = "D"
+    def go_left(self):
+        self.movement_x = -0.75
+        self.direction = "L"
+    def go_right(self):
+        self.movement_x = 1.5
+        self.direction = "R"
+    def go_up(self):
+        self.movement_y = -0.75
+        self.direction = "U"
+
+    def stop_x(self):
+        self.movement_x = 0
+        self.rect.x += self.movement_x
+    def stop_y(self):
+        self.movement_y = 0
+        self.rect.y += self.movement_y
 #####################################################################################
 
 class HardBlock(pygame.sprite.Sprite):
@@ -245,6 +338,7 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             column = mouse_position[0] // BLOCK_WIDTH
             row = mouse_position[1] // BLOCK_HEIGHT
@@ -252,8 +346,50 @@ while not done:
             print("Grid value = ", grid[row][column])
             print(type(player))
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DOWN:
+                player.go_down()
+            if event.key == pygame.K_LEFT:
+                player.go_left()
+            if event.key == pygame.K_RIGHT:
+                player.go_right()
+            if event.key == pygame.K_UP:
+                player.go_up()
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_DOWN and player.movement_y > 0:
+                    player.stop_y()
+                    if player.movement_x < 0:
+                        player.direction = "L"
+                    elif player.movement_x > 0:
+                        player.direction = "R"
+            if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and player.movement_x < 0:
+                    player.stop_x()
+                    if player.movement_y < 0:
+                        player.direction = "U"
+                    elif player.movement_y > 0:
+                        player.direction = "D"
+            if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and player.movement_x > 0:
+                    player.stop_x()
+                    if player.movement_y < 0:
+                        player.direction = "U"
+                    elif player.movement_y > 0:
+                        player.direction = "D"
+            if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP and player.movement_y < 0:
+                    player.stop_y()
+                    if player.movement_x < 0:
+                        player.direction = "L"
+                    elif player.movement_x > 0:
+                        player.direction = "R"
+
+
     mouse_position = pygame.mouse.get_pos()
 
+    player_list.update()
     '''
     mouse_position = pygame.mouse.get_pos()
     unmovable_object.rect.x = mouse_position[0]

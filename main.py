@@ -69,6 +69,8 @@ class Player(pygame.sprite.Sprite):
 
     # Hvilken vei ser spilleren når han starter? D= down
     direction = "D"
+    my_collide_rect = lambda a, b: a.hitbox.colliderect(b.hitbox)
+
 
     # Metoder
     def __init__(self):
@@ -144,12 +146,15 @@ class Player(pygame.sprite.Sprite):
         #Set starting frame
         self.image = self.walking_frames_d[1]
 
+
         #Reference to frame rectangle
         self.rect = self.image.get_rect()
+        '''
+        self.rect.width = 9
+        self.rect.height = 7
+        self.rect.center = (100,100)
+        '''
 
-
-        print(type(self.rect))
-        print(type(self.image.get_rect()))
         print(self.rect)
 
     def update(self):
@@ -315,10 +320,15 @@ for column in range(BLOCKS):
 # Spilleren
 player_list = pygame.sprite.Group()
 player = Player()
-player.rect.x = BLOCK_WIDTH
-player.rect.y = BLOCK_HEIGHT
+#player.rect.x =  BLOCK_WIDTH
+#player.rect.y =  BLOCK_HEIGHT
+player.mask = pygame.mask.from_surface(player.image)
+player.mask.clear()
+for width in range (34):
+    for height in range(48):
+        if height > 34 and 6 < width < 26:
+            player.mask.set_at((width, height),1)
 player_list.add(player)
-
 '''
 softblock.rect.x = column * BLOCK_HEIGHT
 softblock.rect.y = row * BLOCK_WIDTH
@@ -344,8 +354,8 @@ while not done:
             row = mouse_position[1] // BLOCK_HEIGHT
             print(row, column)
             print("Grid value = ", grid[row][column])
-            print(type(player))
-
+            print(player.mask.count())
+            # print(player.mask.get_at((mouse_position[0],mouse_position[1])))
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 player.go_down()
@@ -386,6 +396,8 @@ while not done:
                     elif player.movement_x > 0:
                         player.direction = "R"
 
+    blocks_hit_list = pygame.sprite.spritecollide(player, hardblock_list, True, collided=pygame.sprite.collide_mask(player, hardblock))
+
 
     mouse_position = pygame.mouse.get_pos()
 
@@ -396,6 +408,7 @@ while not done:
     unmovable_object.rect.y = mouse_position[1]
     '''
     ################Her laster vi inn grafikken som ikke er sprites:#####################
+    ####Denne kan gå utenom loopen?##############
 
     for column in range(BLOCKS):
         column_area = 0 < column < BLOCKS-1

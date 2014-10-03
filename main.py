@@ -21,7 +21,7 @@ BLACK = (0, 0, 0)
 GRAY = (192, 192, 192)
 
 #Play Size
-BLOCKS = 15  # Should be an odd number, make a try here later!
+BLOCKS = 17  # Should be an odd number, make a try here later!
 BLOCK_WIDTH = 32
 BLOCK_HEIGHT = 32
 CAPTION_NAME = "Kim's Bomberman"
@@ -52,9 +52,9 @@ for i in range(4):
         field = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
         field2x = pygame.transform.scale2x(field)
 
-
+#####################################################################################
 ############################## player with sprite sheet:#############################
-######Skal i egen fil ########
+##################################Skal i egen fil ###################################
 class Player(pygame.sprite.Sprite):
 
     # vi setter startverdiene til Player:
@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite):
 
     # Hvilken vei ser spilleren når han starter? D= down
     direction = "D"
-    my_collide_rect = lambda a, b: a.hitbox.colliderect(b.hitbox)
+    # my_collide_rect = lambda a, b: a.hitbox.colliderect(b.hitbox)
 
 
     # Metoder
@@ -149,12 +149,8 @@ class Player(pygame.sprite.Sprite):
 
         #Reference to frame rectangle
         self.rect = self.image.get_rect()
-        '''
-        self.rect.width = 9
-        self.rect.height = 7
-        self.rect.center = (100,100)
-        '''
-
+        self.rect.y = 32 # Startposition y
+        self.rect.x = 32 # startposition x
         print(self.rect)
 
     def update(self):
@@ -177,6 +173,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.movement_y
         self.rect.x += self.movement_x
 
+        '''
+        hitbox = pygame.sprite.Sprite
+        pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14 )
+        '''
+
     def go_down(self):
         self.movement_y = 1.5
         self.direction = "D"
@@ -197,6 +198,26 @@ class Player(pygame.sprite.Sprite):
         self.movement_y = 0
         self.rect.y += self.movement_y
 #####################################################################################
+##############################^^^^PLAYER^^^^#########################################
+
+class Hitbox(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        # self.rect = pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14)
+
+        self.image = pygame.Surface([22, 14])
+        self.image.fill(WHITE)
+        self.rect = pygame.Rect(player.rect.x + 6,player.rect.y + 34, 22 ,14)
+        '''
+        self.rect.y = 34
+        self.rect.x = 8
+        '''
+
+
+    def update(self):
+        self.rect = pygame.Rect(player.rect.x + 6,player.rect.y + 34, 22 ,14)
+
+
 
 class HardBlock(pygame.sprite.Sprite):
 
@@ -322,13 +343,14 @@ player_list = pygame.sprite.Group()
 player = Player()
 #player.rect.x =  BLOCK_WIDTH
 #player.rect.y =  BLOCK_HEIGHT
-player.mask = pygame.mask.from_surface(player.image)
-player.mask.clear()
-for width in range (34):
-    for height in range(48):
-        if height > 34 and 6 < width < 26:
-            player.mask.set_at((width, height),1)
 player_list.add(player)
+
+hitbox_list = pygame.sprite.Group()
+hitbox = Hitbox()
+hitbox_list.add(hitbox)
+
+
+
 '''
 softblock.rect.x = column * BLOCK_HEIGHT
 softblock.rect.y = row * BLOCK_WIDTH
@@ -354,8 +376,11 @@ while not done:
             row = mouse_position[1] // BLOCK_HEIGHT
             print(row, column)
             print("Grid value = ", grid[row][column])
+            '''
             print(player.mask.count())
-            # print(player.mask.get_at((mouse_position[0],mouse_position[1])))
+            print(player.mask.get_bounding_rects())
+            '''
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 player.go_down()
@@ -395,13 +420,24 @@ while not done:
                         player.direction = "L"
                     elif player.movement_x > 0:
                         player.direction = "R"
+    '''
+    player.mask = pygame.mask.from_surface(player.image)
+    player.mask.clear()
+    for width in range (34):
+        for height in range(48):
+            if height > 34 and 6 < width < 26:
+                player.mask.set_at((width, height),1)
+    '''
+    # hitbox = pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14)
 
-    blocks_hit_list = pygame.sprite.spritecollide(player, hardblock_list, True, collided=pygame.sprite.collide_mask(player, hardblock))
+    blocks_hit_list = pygame.sprite.spritecollide(hitbox, hardblock_list, True)
+
 
 
     mouse_position = pygame.mouse.get_pos()
 
     player_list.update()
+    hitbox_list.update()
     '''
     mouse_position = pygame.mouse.get_pos()
     unmovable_object.rect.x = mouse_position[0]
@@ -426,6 +462,7 @@ while not done:
     # Spritene tegnes etter grafikken som ikke kan røres:
     all_sprites_list.draw(screen)
     player_list.draw(screen)
+    # hitbox_list.draw(screen)
 
     # flip skriver til screen
     pygame.display.flip()

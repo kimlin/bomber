@@ -67,6 +67,7 @@ class Hitbox(pygame.sprite.Sprite):
         self.image = pygame.Surface([22, 14])
         self.image.fill(WHITE)
         self.rect = pygame.Rect(BLOCK_WIDTH + 6,BLOCK_HEIGHT + 34, 22 ,14)
+
         '''
         self.rect.y = 34
         self.rect.x = 8
@@ -75,8 +76,8 @@ class Hitbox(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.x += self.movement_x
+        #self.rect.y += self.movement_y Denne kan ikke stå her oppe!
         #print(self.rect.bottom)
-        print(self.movement_y)
 
         # Did this update cause us to hit a wall?
         block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
@@ -88,7 +89,7 @@ class Hitbox(pygame.sprite.Sprite):
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
         # Move up/down
-        self.rect.y += self.movement_y
+        self.rect.y += self.movement_y #jævlig spesiellt at denne linjen måtte stå akkurat her
 
         # Check and see if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
@@ -220,19 +221,27 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = 32 # Startposition y
         self.rect.x = 32 # startposition x
         print(self.rect)
+        '''
+        hitbox.rect.x - 6
+        hotbox.rect.y -34
+        '''
 
     def update(self):
+
+        self.rect.x = hitbox.rect.x - 6
+        self.rect.y = hitbox.rect.y -34
+
         pos = hitbox.rect.y + hitbox.rect.x
-        if self.direction == "D":
+        if hitbox.direction == "D":
             frame = (pos//30 ) % len(self.walking_frames_d)
             self.image = self.walking_frames_d[frame]
-        elif self.direction == "L":
+        elif hitbox.direction == "L":
             frame = (pos//30) % len(self.walking_frames_l)
             self.image = self.walking_frames_l[frame]
-        elif self.direction == "R":
+        elif hitbox.direction == "R":
             frame = (pos//30) % len(self.walking_frames_r)
             self.image = self.walking_frames_r[frame]
-        elif self.direction == "U":
+        elif hitbox.direction == "U":
             frame = (pos//30) % len(self.walking_frames_u)
             self.image = self.walking_frames_u[frame]
 
@@ -496,7 +505,7 @@ while not done:
     # Spritene tegnes etter grafikken som ikke kan røres:
     all_sprites_list.draw(screen)
     player_list.draw(screen)
-    hitbox_list.draw(screen)
+    #hitbox_list.draw(screen)
 
     # flip skriver til screen
     pygame.display.flip()

@@ -52,6 +52,74 @@ for i in range(4):
         field = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
         field2x = pygame.transform.scale2x(field)
 
+
+class Hitbox(pygame.sprite.Sprite):
+
+    direction = "D"
+    movement_x = 0
+    movement_y = 0
+    walls = None
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        # self.rect = pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14)
+
+        self.image = pygame.Surface([22, 14])
+        self.image.fill(WHITE)
+        self.rect = pygame.Rect(BLOCK_WIDTH + 6,BLOCK_HEIGHT + 34, 22 ,14)
+        '''
+        self.rect.y = 34
+        self.rect.x = 8
+        '''
+
+
+    def update(self):
+        self.rect.x += self.movement_x
+        #print(self.rect.bottom)
+        print(self.movement_y)
+
+        # Did this update cause us to hit a wall?
+        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+        for block in block_hit_list:
+            # If we are moving right, set our right side to the left side of the item we hit
+            if self.movement_x > 0:
+                self.rect.right = block.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite.
+                self.rect.left = block.rect.right
+        # Move up/down
+        self.rect.y += self.movement_y
+
+        # Check and see if we hit anything
+        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+        for block in block_hit_list:
+
+            # Reset our position based on the top/bottom of the object.
+            if self.movement_y > 0:
+                self.rect.bottom = block.rect.top
+            else:
+                self.rect.top = block.rect.bottom
+
+    def go_down(self):
+        self.movement_y = 2
+        self.direction = "D"
+    def go_left(self):
+        self.movement_x = -1.5
+        self.direction = "L"
+    def go_right(self):
+        self.movement_x = 2
+        self.direction = "R"
+    def go_up(self):
+        self.movement_y = -1.5
+        self.direction = "U"
+
+    def stop_x(self):
+        self.movement_x = 0
+        self.rect.x += self.movement_x
+    def stop_y(self):
+        self.movement_y = 0
+        self.rect.y += self.movement_y
+
 #####################################################################################
 ############################## player with sprite sheet:#############################
 ##################################Skal i egen fil ###################################
@@ -154,9 +222,7 @@ class Player(pygame.sprite.Sprite):
         print(self.rect)
 
     def update(self):
-        self.rect.y += self.movement_y
-        self.rect.x += self.movement_x
-        pos = self.rect.y + self.rect.x
+        pos = hitbox.rect.y + hitbox.rect.x
         if self.direction == "D":
             frame = (pos//30 ) % len(self.walking_frames_d)
             self.image = self.walking_frames_d[frame]
@@ -170,52 +236,15 @@ class Player(pygame.sprite.Sprite):
             frame = (pos//30) % len(self.walking_frames_u)
             self.image = self.walking_frames_u[frame]
 
-        self.rect.y += self.movement_y
-        self.rect.x += self.movement_x
 
         '''
         hitbox = pygame.sprite.Sprite
         pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14 )
         '''
 
-    def go_down(self):
-        self.movement_y = 1.5
-        self.direction = "D"
-    def go_left(self):
-        self.movement_x = -0.75
-        self.direction = "L"
-    def go_right(self):
-        self.movement_x = 1.5
-        self.direction = "R"
-    def go_up(self):
-        self.movement_y = -0.75
-        self.direction = "U"
 
-    def stop_x(self):
-        self.movement_x = 0
-        self.rect.x += self.movement_x
-    def stop_y(self):
-        self.movement_y = 0
-        self.rect.y += self.movement_y
 #####################################################################################
 ##############################^^^^PLAYER^^^^#########################################
-
-class Hitbox(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        # self.rect = pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14)
-
-        self.image = pygame.Surface([22, 14])
-        self.image.fill(WHITE)
-        self.rect = pygame.Rect(player.rect.x + 6,player.rect.y + 34, 22 ,14)
-        '''
-        self.rect.y = 34
-        self.rect.x = 8
-        '''
-
-
-    def update(self):
-        self.rect = pygame.Rect(player.rect.x + 6,player.rect.y + 34, 22 ,14)
 
 
 
@@ -280,6 +309,7 @@ hardblock_list = pygame.sprite.Group()
 unmovable_object = HardBlock()
 
 # Rammen. De brikkene som ikke kan ødelegges
+
 for column in range(BLOCKS):
 
     for row in range(BLOCKS):
@@ -309,6 +339,9 @@ for column in range(BLOCKS):
             all_sprites_list.add(hardblock)
             hardblock_list.add(hardblock)
             grid[row][column] = 1
+
+
+Hitbox.walls = hardblock_list
 
 # soft sprite blocks loads after hardblocks fordi drid må fylles opp med hardblocks
 softblock_list = pygame.sprite.Group()
@@ -367,6 +400,8 @@ player_image.set_colorkey(BLACK)
 done = False
 
 while not done:
+    player_list.update()
+    hitbox_list.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -383,43 +418,43 @@ while not done:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                player.go_down()
+                hitbox.go_down()
             if event.key == pygame.K_LEFT:
-                player.go_left()
+                hitbox.go_left()
             if event.key == pygame.K_RIGHT:
-                player.go_right()
+                hitbox.go_right()
             if event.key == pygame.K_UP:
-                player.go_up()
+                hitbox.go_up()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
-                if event.key == pygame.K_DOWN and player.movement_y > 0:
-                    player.stop_y()
-                    if player.movement_x < 0:
-                        player.direction = "L"
-                    elif player.movement_x > 0:
-                        player.direction = "R"
+                if event.key == pygame.K_DOWN and hitbox.movement_y > 0:
+                    hitbox.stop_y()
+                    if hitbox.movement_x < 0:
+                        hitbox.direction = "L"
+                    elif hitbox.movement_x > 0:
+                        hitbox.direction = "R"
             if event.key == pygame.K_LEFT:
-                if event.key == pygame.K_LEFT and player.movement_x < 0:
-                    player.stop_x()
-                    if player.movement_y < 0:
-                        player.direction = "U"
-                    elif player.movement_y > 0:
-                        player.direction = "D"
+                if event.key == pygame.K_LEFT and hitbox.movement_x < 0:
+                    hitbox.stop_x()
+                    if hitbox.movement_y < 0:
+                        hitbox.direction = "U"
+                    elif hitbox.movement_y > 0:
+                        hitbox.direction = "D"
             if event.key == pygame.K_RIGHT:
-                if event.key == pygame.K_RIGHT and player.movement_x > 0:
-                    player.stop_x()
-                    if player.movement_y < 0:
-                        player.direction = "U"
-                    elif player.movement_y > 0:
-                        player.direction = "D"
+                if event.key == pygame.K_RIGHT and hitbox.movement_x > 0:
+                    hitbox.stop_x()
+                    if hitbox.movement_y < 0:
+                        hitbox.direction = "U"
+                    elif hitbox.movement_y > 0:
+                        hitbox.direction = "D"
             if event.key == pygame.K_UP:
-                if event.key == pygame.K_UP and player.movement_y < 0:
-                    player.stop_y()
-                    if player.movement_x < 0:
-                        player.direction = "L"
-                    elif player.movement_x > 0:
-                        player.direction = "R"
+                if event.key == pygame.K_UP and hitbox.movement_y < 0:
+                    hitbox.stop_y()
+                    if hitbox.movement_x < 0:
+                        hitbox.direction = "L"
+                    elif hitbox.movement_x > 0:
+                        hitbox.direction = "R"
     '''
     player.mask = pygame.mask.from_surface(player.image)
     player.mask.clear()
@@ -430,14 +465,13 @@ while not done:
     '''
     # hitbox = pygame.Rect(player.rect.x + 8,player.rect.y + 34, 18 ,14)
 
-    blocks_hit_list = pygame.sprite.spritecollide(hitbox, hardblock_list, True)
+    # blocks_hit_list = pygame.sprite.spritecollide(hitbox, hardblock_list, True)
 
 
 
     mouse_position = pygame.mouse.get_pos()
 
-    player_list.update()
-    hitbox_list.update()
+
     '''
     mouse_position = pygame.mouse.get_pos()
     unmovable_object.rect.x = mouse_position[0]
@@ -462,7 +496,7 @@ while not done:
     # Spritene tegnes etter grafikken som ikke kan røres:
     all_sprites_list.draw(screen)
     player_list.draw(screen)
-    # hitbox_list.draw(screen)
+    hitbox_list.draw(screen)
 
     # flip skriver til screen
     pygame.display.flip()

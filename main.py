@@ -13,19 +13,6 @@ __author__ = 'Kim'
 import pygame
 import random
 
-'''
-Hva er hardkodet, og hva skal gjøres:
-kryping rundt hjørner
-hitbox størrelse
-animasjon? pos // 30
-startposisjon
-kryping skal bare gjelde for hardblocks
-
-'''
-
-
-
-
 ##########################CONSTANTS##################################
 #Skal legges i egen fil senere
 # Define some colors
@@ -34,7 +21,7 @@ BLACK = (0, 0, 0)
 GRAY = (192, 192, 192)
 
 #Play Size
-BLOCKS = 15  # Should be an odd number, make a try here later!
+BLOCKS = 17  # Should be an odd number, make a try here later!
 BLOCK_WIDTH = 32
 BLOCK_HEIGHT = 32
 CAPTION_NAME = "Kim's Bomberman"
@@ -98,17 +85,9 @@ class Hitbox(pygame.sprite.Sprite):
             # If we are moving right, set our right side to the left side of the item we hit
             if self.movement_x > 0:
                 self.rect.right = block.rect.left
-                if self.rect.centery - 12 > block.rect.centery and self.movement_y == 0 and block.rect.x < SCREEN_HEIGHT - BLOCK_WIDTH:
-                    self.rect.y += 1
-                elif self.rect.centery + 12 < block.rect.centery and self.movement_y == 0 and block.rect.x < SCREEN_HEIGHT - BLOCK_WIDTH:
-                    self.rect.y -= 1
             else:
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
-                if self.rect.centery - 12 > block.rect.centery and self.movement_y == 0 and block.rect.x > 0:
-                    self.rect.y += 1
-                elif self.rect.centery + 12 < block.rect.centery and self.movement_y == 0 and block.rect.x > 0:
-                    self.rect.y -= 1
         # Move up/down
         self.rect.y += self.movement_y #jævlig spesiellt at denne linjen måtte stå akkurat her
 
@@ -119,16 +98,8 @@ class Hitbox(pygame.sprite.Sprite):
             # Reset our position based on the top/bottom of the object.
             if self.movement_y > 0:
                 self.rect.bottom = block.rect.top
-                if self.rect.centerx - 12 > block.rect.centerx and self.movement_x == 0 and block.rect.y < SCREEN_HEIGHT - BLOCK_HEIGHT:
-                    self.rect.x += 1
-                elif self.rect.centerx + 12 < block.rect.centerx and self.movement_x == 0 and block.rect.y < SCREEN_HEIGHT - BLOCK_HEIGHT:
-                    self.rect.x -= 1
             else:
                 self.rect.top = block.rect.bottom
-                if self.rect.centerx - 12 > block.rect.centerx and self.movement_x == 0 and block.rect.y > 0:
-                    self.rect.x += 1
-                elif self.rect.centerx + 12 < block.rect.centerx and self.movement_x == 0 and block.rect.y > 0:
-                    self.rect.x -= 1
 
     def go_down(self):
         self.movement_y = 2
@@ -344,8 +315,7 @@ clock = pygame.time.Clock()
 all_sprites_list = pygame.sprite.Group()
 # heavy sprite blocks
 hardblock_list = pygame.sprite.Group()
-wall_list = pygame.sprite.Group()
-# unmovable_object = HardBlock()
+unmovable_object = HardBlock()
 
 # Rammen. De brikkene som ikke kan ødelegges
 
@@ -362,14 +332,12 @@ for column in range(BLOCKS):
             # Add the block to the list of objects
             all_sprites_list.add(hardblock)
             hardblock_list.add(hardblock)
-            wall_list.add(hardblock)
             grid[row][column] = 1
         elif row == 0 and column_area or row == BLOCKS-1 and column_area:
             hardblock.rect.x = column * BLOCK_HEIGHT
             hardblock.rect.y = row * BLOCK_WIDTH
             all_sprites_list.add(hardblock)
             hardblock_list.add(hardblock)
-            wall_list.add(hardblock)
             grid[row][column] = 1
     for row in range(2, BLOCKS-1, 2):
         hardblock = HardBlock()
@@ -379,11 +347,10 @@ for column in range(BLOCKS):
             hardblock.rect.y = row * BLOCK_WIDTH
             all_sprites_list.add(hardblock)
             hardblock_list.add(hardblock)
-            wall_list.add(hardblock)
             grid[row][column] = 1
 
 
-
+Hitbox.walls = hardblock_list
 
 # soft sprite blocks loads after hardblocks fordi drid må fylles opp med hardblocks
 softblock_list = pygame.sprite.Group()
@@ -402,7 +369,6 @@ for column in range(BLOCKS):
                 softblock.rect.y = row * BLOCK_WIDTH
                 all_sprites_list.add(softblock)
                 softblock_list.add(softblock)
-                wall_list.add(softblock)
                 grid[row][column] = 2
         elif 2 < column < 14 and BLOCKS-column > 3:
             if grid[row][column] == 0:
@@ -410,12 +376,10 @@ for column in range(BLOCKS):
                 softblock.rect.y = row * BLOCK_WIDTH
                 all_sprites_list.add(softblock)
                 softblock_list.add(softblock)
-                wall_list.add(softblock)
                 grid[row][column] = 2
         elif grid[row][column] == 0:
             grid[row][column] = 3
 
-Hitbox.walls = wall_list
 # Spilleren
 player_list = pygame.sprite.Group()
 player = Player()
@@ -541,7 +505,7 @@ while not done:
     # Spritene tegnes etter grafikken som ikke kan røres:
     all_sprites_list.draw(screen)
     player_list.draw(screen)
-    # hitbox_list.draw(screen)
+    #hitbox_list.draw(screen)
 
     # flip skriver til screen
     pygame.display.flip()

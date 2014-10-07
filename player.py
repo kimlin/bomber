@@ -30,17 +30,19 @@ class Hitbox(pygame.sprite.Sprite):
             # If we are moving right, set our right side to the left side of the item we hit
             if self.movement_x > 0:
                 self.rect.right = block.rect.left
-                if self.rect.centery - 12 > block.rect.centery and self.movement_y == 0 and block.rect.x < SCREEN_HEIGHT - BLOCK_WIDTH and type(block == type(hardblock)):
-                    self.rect.y += 1
-                elif self.rect.centery + 12 < block.rect.centery and self.movement_y == 0 and block.rect.x < SCREEN_HEIGHT - BLOCK_WIDTH and type(block == type(hardblock)):
-                    self.rect.y -= 1
+                if self.movement_y == 0 and block.rect.x < SCREEN_HEIGHT - BLOCK_WIDTH and type(block == type(hardblock)):
+                    if self.rect.centery - 12 > block.rect.centery:
+                        self.rect.y += 1
+                    elif self.rect.centery + 12 < block.rect.centery:
+                        self.rect.y -= 1
             else:
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
-                if self.rect.centery - 12 > block.rect.centery and self.movement_y == 0 and block.rect.x > 0 and type(block == type(hardblock)):
-                    self.rect.y += 1
-                elif self.rect.centery + 12 < block.rect.centery and self.movement_y == 0 and block.rect.x > 0 and type(block == type(hardblock)):
-                    self.rect.y -= 1
+                if self.movement_y == 0 and block.rect.x > 0 and type(block == type(hardblock)):
+                    if self.rect.centery - 12 > block.rect.centery:
+                        self.rect.y += 1
+                    elif self.rect.centery + 12 < block.rect.centery:
+                        self.rect.y -= 1
         # Move up/down
         self.rect.y += self.movement_y  # jævlig spesiellt at denne linjen måtte stå akkurat her
 
@@ -51,16 +53,18 @@ class Hitbox(pygame.sprite.Sprite):
             # Reset our position based on the top/bottom of the object.
             if self.movement_y > 0:
                 self.rect.bottom = block.rect.top
-                if self.rect.centerx - 12 > block.rect.centerx and self.movement_x == 0 and block.rect.y < SCREEN_HEIGHT - BLOCK_HEIGHT and type(block == type(hardblock)):
-                    self.rect.x += 1
-                elif self.rect.centerx + 12 < block.rect.centerx and self.movement_x == 0 and block.rect.y < SCREEN_HEIGHT - BLOCK_HEIGHT and type(block == type(hardblock)):
-                    self.rect.x -= 1
+                if type(block == type(hardblock)) and self.movement_x == 0 and block.rect.y < SCREEN_HEIGHT - BLOCK_HEIGHT:
+                    if self.rect.centerx - 12 > block.rect.centerx:
+                        self.rect.x += 1
+                    elif self.rect.centerx + 12 < block.rect.centerx:
+                        self.rect.x -= 1
             else:
-                self.rect.top = block.rect.bottom
-                if self.rect.centerx - 12 > block.rect.centerx and self.movement_x == 0 and block.rect.y > 0 and type(block == type(hardblock)):
-                    self.rect.x += 1
-                elif self.rect.centerx + 12 < block.rect.centerx and self.movement_x == 0 and block.rect.y > 0 and type(block == type(hardblock)):
-                    self.rect.x -= 1
+                if type(block == type(hardblock)) and self.movement_x == 0 and block.rect.y > 0:
+                    self.rect.top = block.rect.bottom
+                    if self.rect.centerx - 12 > block.rect.centerx:
+                        self.rect.x += 1
+                    elif self.rect.centerx + 12 < block.rect.centerx:
+                        self.rect.x -= 1
 
     def go_down(self):
         self.movement_y = 2

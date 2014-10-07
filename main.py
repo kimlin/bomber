@@ -1,14 +1,4 @@
 __author__ = 'Kim'
-"""
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
-
- Explanation video: http://youtu.be/4YqIKncMJNs
- Explanation video: http://youtu.be/ONAK8VZIcI4
- Explanation video: http://youtu.be/_6c4o41BIms
-"""
 
 import pygame
 from player import *
@@ -16,20 +6,17 @@ from constants import *
 from blocks import *
 
 '''
-Hva er hardkodet, og hva skal gjøres:
 hitbox størrelse
 animasjon? pos // 30
-startposisjon
-kryping skal bare gjelde for hardblocks
-
 '''
 
 # Call this function so the Pygame library can initialize itself
 pygame.init()
-# Create an 800x600 sized screen
+# Create screen
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-# This sets the name of the window
+# caption name:
 pygame.display.set_caption(CAPTION_NAME)
+# Create a clock:
 clock = pygame.time.Clock()
 
 #sprite_lists
@@ -117,6 +104,7 @@ while not done:
             print(row, column)
             print("Grid value = ", grid[row][column])
 
+        # Tastetrykk ned:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 hitbox.go_down()
@@ -127,6 +115,7 @@ while not done:
             if event.key == pygame.K_UP:
                 hitbox.go_up()
 
+        # Tastetrykk slippes:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 if event.key == pygame.K_DOWN and hitbox.movement_y > 0:
@@ -159,9 +148,7 @@ while not done:
 
     mouse_position = pygame.mouse.get_pos()
 
-    #####################Her laster vi inn grafikken som ikke er sprites:################
-    ############################Denne kan gå utenom loopen?##############################
-
+    # Grafikk:
     for column in range(BLOCKS):
         column_area = 0 < column < BLOCKS-1
         for row in range(BLOCKS):

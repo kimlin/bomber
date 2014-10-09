@@ -1,7 +1,9 @@
 __author__ = 'Kim'
+
 import pygame
 from constants import *
 from blocks import *
+from bomb import *
 
 
 class Hitbox(pygame.sprite.Sprite):
@@ -23,6 +25,8 @@ class Hitbox(pygame.sprite.Sprite):
         self.rect.x += self.movement_x
         #self.rect.y += self.movement_y Denne kan ikke stå her oppe!
         #print(self.rect.bottom)
+
+
 
         # Did this update cause us to hit a wall?
         block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
@@ -59,8 +63,8 @@ class Hitbox(pygame.sprite.Sprite):
                     elif self.rect.centerx + 12 < block.rect.centerx:
                         self.rect.x -= 1
             else:
+                self.rect.top = block.rect.bottom
                 if type(block == type(hardblock)) and self.movement_x == 0 and block.rect.y > 0:
-                    self.rect.top = block.rect.bottom
                     if self.rect.centerx - 12 > block.rect.centerx:
                         self.rect.x += 1
                     elif self.rect.centerx + 12 < block.rect.centerx:

@@ -26,9 +26,11 @@ softblock_list = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 player_list = pygame.sprite.Group()
 hitbox_list = pygame.sprite.Group()
-Hitbox.walls = wall_list
+bomb_list = pygame.sprite.Group()
 player_list.add(player)
 hitbox_list.add(hitbox)
+#bomb_list.add(bomb)
+Hitbox.walls = wall_list
 
 # Hardblocks
 for column in range(BLOCKS):
@@ -67,7 +69,6 @@ for column in range(BLOCKS):
 for column in range(BLOCKS):
     for row in range(BLOCKS):
         softblock = SoftBlock()
-        column_area = 0 < column < BLOCKS-1
         if 2 < row < 14 and BLOCKS-row > 3:
             if grid[row][column] == 0:
                 softblock.rect.x = column * BLOCK_HEIGHT
@@ -101,8 +102,20 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             column = mouse_position[0] // BLOCK_WIDTH
             row = mouse_position[1] // BLOCK_HEIGHT
+            player_column = hitbox.rect.centerx // BLOCK_WIDTH
+            player_row = hitbox.rect.centery // BLOCK_HEIGHT
             print(row, column)
+            print(player_column, player_row)
             print("Grid value = ", grid[row][column])
+            #hitbox2 = Hitbox()
+            #hitbox_list.add(hitbox2)
+            #player2 = Player()
+            #player_list.add(player2)
+            bomb = Bomb()
+            bomb.rect.x = player_column * BLOCK_HEIGHT
+            bomb.rect.y = player_row * BLOCK_WIDTH
+            bomb_list.add(bomb)
+
 
         # Tastetrykk ned:
         if event.type == pygame.KEYDOWN:
@@ -163,8 +176,9 @@ while not done:
                 screen.blit(field_shadow2x, [row * BLOCK_WIDTH, column * BLOCK_HEIGHT])
     # Sprites:
     all_sprites_list.draw(screen)
+    bomb_list.draw(screen)
     player_list.draw(screen)
-    # hitbox_list.draw(screen)
+    #hitbox_list.draw(screen)
     pygame.display.flip()
     clock.tick(60)
 

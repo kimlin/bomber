@@ -1,4 +1,4 @@
 bomber
 ======
 
-En klone av bomberman som er laget som del av undervisning i IS-206
+En klone av bomberman som er laget som del av prosjekt i IS-206

@@ -38,7 +38,6 @@ class Bomb(pygame.sprite.Sprite):
         self.rect = pygame.Rect(32, 32, 32, 32)
         self.rect.y = 32  # Startposition y
         self.rect.x = 32  # startposition x
-        print(self.rect)
 
     def update(self):
 

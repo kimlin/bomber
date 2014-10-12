@@ -186,7 +186,6 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = 32  # Startposition y
         self.rect.x = 32  # startposition x
-        print(self.rect)
 
     def update(self):
 

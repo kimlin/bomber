@@ -103,17 +103,8 @@ while not done:
             print(row, column)
             #print(player_column, player_row)
             print("Grid value = ", grid[row][column])
-            #hitbox2 = Hitbox()
-            #hitbox_list.add(hitbox2)
-            #player2 = Player()
-            #player_list.add(player2)
-            #bomb.update()
-            '''
-            bomb_fuse = seconds - seconds_b
-            print(bomb_fuse)
-            if bomb_fuse > 7:
-                bomb.kill()
-            '''
+
+
 
 
 

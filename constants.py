@@ -1,13 +1,12 @@
 __author__ = 'Kim'
 import pygame
 
-##########################CONSTANTS##################################
-#Skal legges i egen fil senere
-# Define some colors
+
+# Farger
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (192, 192, 192)
-
+# Tid
 #Play Size
 BLOCKS = 15  # Should be an odd number, make a try here later!
 BLOCK_WIDTH = 32

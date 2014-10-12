@@ -93,8 +93,6 @@ for column in range(BLOCKS):
 done = False
 
 while not done:
-    player_list.update()
-    hitbox_list.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -102,19 +100,23 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             column = mouse_position[0] // BLOCK_WIDTH
             row = mouse_position[1] // BLOCK_HEIGHT
-            player_column = hitbox.rect.centerx // BLOCK_WIDTH
-            player_row = hitbox.rect.centery // BLOCK_HEIGHT
             print(row, column)
-            print(player_column, player_row)
+            #print(player_column, player_row)
             print("Grid value = ", grid[row][column])
             #hitbox2 = Hitbox()
             #hitbox_list.add(hitbox2)
             #player2 = Player()
             #player_list.add(player2)
-            bomb = Bomb()
-            bomb.rect.x = player_column * BLOCK_HEIGHT
-            bomb.rect.y = player_row * BLOCK_WIDTH
-            bomb_list.add(bomb)
+            #bomb.update()
+            '''
+            bomb_fuse = seconds - seconds_b
+            print(bomb_fuse)
+            if bomb_fuse > 7:
+                bomb.kill()
+            '''
+
+
+
 
 
         # Tastetrykk ned:
@@ -127,6 +129,15 @@ while not done:
                 hitbox.go_right()
             if event.key == pygame.K_UP:
                 hitbox.go_up()
+            if event.key == pygame.K_SPACE:
+                player_column = hitbox.rect.centerx // BLOCK_WIDTH
+                player_row = hitbox.rect.centery // BLOCK_HEIGHT
+                bomb = Bomb()
+                bomb.rect.x = player_column * BLOCK_HEIGHT
+                bomb.rect.y = player_row * BLOCK_WIDTH
+                bomb_list.add(bomb)
+
+
 
         # Tastetrykk slippes:
         if event.type == pygame.KEYUP:
@@ -160,6 +171,16 @@ while not done:
                         hitbox.direction = "R"
 
     mouse_position = pygame.mouse.get_pos()
+    player_list.update()
+    hitbox_list.update()
+    if len(bomb_list) > 0:
+        bomb_list.update()
+    '''
+    seconds = FRAME_COUNT // FRAME_RATE
+    FRAME_COUNT += 1
+    '''
+
+
 
     # Grafikk:
     for column in range(BLOCKS):

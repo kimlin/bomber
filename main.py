@@ -123,10 +123,12 @@ while not done:
             if event.key == pygame.K_SPACE:
                 player_column = hitbox.rect.centerx // BLOCK_WIDTH
                 player_row = hitbox.rect.centery // BLOCK_HEIGHT
-                bomb = Bomb()
-                bomb.rect.x = player_column * BLOCK_HEIGHT
-                bomb.rect.y = player_row * BLOCK_WIDTH
-                bomb_list.add(bomb)
+                if grid[player_row][player_column] == 3:
+                    grid[player_row][player_column] = 4
+                    bomb = Bomb()
+                    bomb.rect.x = player_column * BLOCK_HEIGHT
+                    bomb.rect.y = player_row * BLOCK_WIDTH
+                    bomb_list.add(bomb)
 
 
 

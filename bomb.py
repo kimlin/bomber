@@ -57,10 +57,14 @@ class Bomb(pygame.sprite.Sprite):
             self.frame_count = 0
             self.tick += 1
             if self.tick == 2:
-                self.kill()
+                self.explode()
         self.image = self.bomb_frames[self.seconds]
 
-
+    def explode(self):
+        player_column = self.rect.centerx // BLOCK_WIDTH
+        player_row = self.rect.centery // BLOCK_HEIGHT
+        self.kill()
+        grid[player_row][player_column] = 3
 
 
 

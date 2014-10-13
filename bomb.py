@@ -5,6 +5,8 @@ from constants import *
 from blocks import *
 from player import *
 
+#hitbox.bomb_gone()
+
 class Bomb(pygame.sprite.Sprite):
 
     bomb_frames = []
@@ -45,6 +47,7 @@ class Bomb(pygame.sprite.Sprite):
         self.frame_count += 1
 
 
+
         '''
         bomb_fuse = self.seconds - self.seconds_b
         print(self.seconds)
@@ -65,6 +68,8 @@ class Bomb(pygame.sprite.Sprite):
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()
         grid[player_row][player_column] = 3
+
+        hitbox.bomb_gone()
 
 
 

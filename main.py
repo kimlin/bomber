@@ -4,6 +4,7 @@ import pygame
 from player import *
 from constants import *
 from blocks import *
+from bomb import *
 
 '''
 hitbox størrelse
@@ -103,6 +104,7 @@ while not done:
             print(row, column)
             #print(player_column, player_row)
             print("Grid value = ", grid[row][column])
+            hitbox.bomb_gone()
 
 
 
@@ -123,12 +125,14 @@ while not done:
             if event.key == pygame.K_SPACE:
                 player_column = hitbox.rect.centerx // BLOCK_WIDTH
                 player_row = hitbox.rect.centery // BLOCK_HEIGHT
-                if grid[player_row][player_column] == 3:
+                if grid[player_row][player_column] == 3 and hitbox.bombs_placed < hitbox.max_bombs:
+                    hitbox.bombs_placed += 1
                     grid[player_row][player_column] = 4
                     bomb = Bomb()
                     bomb.rect.x = player_column * BLOCK_HEIGHT
                     bomb.rect.y = player_row * BLOCK_WIDTH
                     bomb_list.add(bomb)
+                    #hitbox.bomb_gone()
 
 
 

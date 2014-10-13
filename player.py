@@ -3,11 +3,13 @@ __author__ = 'Kim'
 import pygame
 from constants import *
 from blocks import *
-from bomb import *
 
+test = 1
 
 class Hitbox(pygame.sprite.Sprite):
 
+    bombs_placed = 0
+    max_bombs = 1
     direction = "D"
     movement_x = 0
     movement_y = 0
@@ -93,6 +95,10 @@ class Hitbox(pygame.sprite.Sprite):
     def stop_y(self):
         self.movement_y = 0
         self.rect.y += self.movement_y
+
+    def bomb_gone(self):
+        self.bombs_placed -= 1
+
 
 
 class Player(pygame.sprite.Sprite):

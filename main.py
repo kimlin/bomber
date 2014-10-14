@@ -6,11 +6,6 @@ from constants import *
 from blocks import *
 from bomb import *
 
-'''
-hitbox størrelse
-animasjon? pos // 30
-'''
-
 # Call this function so the Pygame library can initialize itself
 pygame.init()
 # Create screen
@@ -26,12 +21,13 @@ hardblock_list = pygame.sprite.Group()
 softblock_list = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 player_list = pygame.sprite.Group()
+player_list = pygame.sprite.Group()
 hitbox_list = pygame.sprite.Group()
 bomb_list = pygame.sprite.Group()
 player_list.add(player)
 hitbox_list.add(hitbox)
-#bomb_list.add(bomb)
 Hitbox.walls = wall_list
+Hitbox.bombs = bomb_list
 
 # Hardblocks
 for column in range(BLOCKS):
@@ -66,11 +62,11 @@ for column in range(BLOCKS):
             wall_list.add(hardblock)
             grid[row][column] = 1
 
-# Softblocks
+# Softblocks, og på slutten settes de ledige plassene til grid value 3
 for column in range(BLOCKS):
     for row in range(BLOCKS):
         softblock = SoftBlock()
-        if 2 < row < 14 and BLOCKS-row > 3:
+        if 2 < row < BLOCKS - 1 and BLOCKS-row > 3:
             if grid[row][column] == 0:
                 softblock.rect.x = column * BLOCK_HEIGHT
                 softblock.rect.y = row * BLOCK_WIDTH
@@ -78,7 +74,7 @@ for column in range(BLOCKS):
                 softblock_list.add(softblock)
                 wall_list.add(softblock)
                 grid[row][column] = 2
-        elif 2 < column < 14 and BLOCKS-column > 3:
+        elif 2 < column < BLOCKS - 1 and BLOCKS-column > 3:
             if grid[row][column] == 0:
                 softblock.rect.x = column * BLOCK_HEIGHT
                 softblock.rect.y = row * BLOCK_WIDTH
@@ -101,16 +97,11 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             column = mouse_position[0] // BLOCK_WIDTH
             row = mouse_position[1] // BLOCK_HEIGHT
+            print(mouse_position[0], mouse_position[1])
             print(row, column)
             #print(player_column, player_row)
             print("Grid value = ", grid[row][column])
             hitbox.bomb_gone()
-
-
-
-
-
-
 
         # Tastetrykk ned:
         if event.type == pygame.KEYDOWN:
@@ -133,8 +124,6 @@ while not done:
                     bomb.rect.y = player_row * BLOCK_WIDTH
                     bomb_list.add(bomb)
                     #hitbox.bomb_gone()
-
-
 
         # Tastetrykk slippes:
         if event.type == pygame.KEYUP:
@@ -172,12 +161,6 @@ while not done:
     hitbox_list.update()
     if len(bomb_list) > 0:
         bomb_list.update()
-    '''
-    seconds = FRAME_COUNT // FRAME_RATE
-    FRAME_COUNT += 1
-    '''
-
-
 
     # Grafikk:
     for column in range(BLOCKS):

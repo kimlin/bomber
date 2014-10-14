@@ -4,8 +4,6 @@ import pygame
 from constants import *
 from blocks import *
 
-test = 1
-
 class Hitbox(pygame.sprite.Sprite):
 
     bombs_placed = 0
@@ -14,6 +12,7 @@ class Hitbox(pygame.sprite.Sprite):
     movement_x = 0
     movement_y = 0
     walls = None
+    bombs = None
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -28,7 +27,17 @@ class Hitbox(pygame.sprite.Sprite):
         #self.rect.y += self.movement_y Denne kan ikke stå her oppe!
         #print(self.rect.bottom)
 
-
+        # Vi kolliderer med bomben etter å ha forlatt den
+        bomb_hit_list = pygame.sprite.spritecollide(self, self.bombs, False)
+        for bomb in bomb_hit_list:
+            if self.rect.right - self.movement_x <= bomb.rect.left: # ta med self.movement_x > 0 hvis det bugger
+                self.rect.right = bomb.rect.left
+            elif self.rect.left - self.movement_x >= bomb.rect.right:
+                self.rect.left = bomb.rect.right
+            elif self.rect.bottom - self.movement_y <= bomb.rect.top:
+                self.rect.bottom = bomb.rect.top
+            elif self.rect.top - self.movement_y >= bomb.rect.bottom:
+                self.rect.top = bomb.rect.bottom
 
         # Did this update cause us to hit a wall?
         block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
@@ -72,12 +81,14 @@ class Hitbox(pygame.sprite.Sprite):
                     elif self.rect.centerx + 12 < block.rect.centerx:
                         self.rect.x -= 1
 
+
+
     def go_down(self):
         self.movement_y = 2
         self.direction = "D"
 
     def go_left(self):
-        self.movement_x = -1.5
+        self.movement_x = -2
         self.direction = "L"
 
     def go_right(self):
@@ -85,7 +96,7 @@ class Hitbox(pygame.sprite.Sprite):
         self.direction = "R"
 
     def go_up(self):
-        self.movement_y = -1.5
+        self.movement_y = -2
         self.direction = "U"
 
     def stop_x(self):

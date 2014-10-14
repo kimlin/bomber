@@ -5,7 +5,7 @@ from constants import *
 from blocks import *
 from player import *
 
-#hitbox.bomb_gone()
+# Det er viktig at import ikke importerer hverandre
 
 class Bomb(pygame.sprite.Sprite):
 
@@ -15,6 +15,7 @@ class Bomb(pygame.sprite.Sprite):
     FRAME_RATE = 60
     seconds = frame_count // FRAME_RATE
     seconds_b = seconds
+    players = None
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -23,7 +24,6 @@ class Bomb(pygame.sprite.Sprite):
         sheet_start_y = 256
         frame_width = 17
         frame_height = 16
-        sheet_margin = 0
         sprite_sheet = pygame.image.load("sprite_sheet0.png")
         for i in range(0, 3):
             sprite_sheet.set_clip(sheet_start_x + (frame_width+0) * i, sheet_start_y, frame_width, frame_height)
@@ -34,8 +34,6 @@ class Bomb(pygame.sprite.Sprite):
             self.bomb_frames.append(b_frame2x)
 
         self.image = self.bomb_frames[0]
-        #self.image = pygame.Surface([32, 32])
-        #self.image.fill(WHITE)
         #Reference to frame rectangle
         self.rect = pygame.Rect(32, 32, 32, 32)
         self.rect.y = 32  # Startposition y
@@ -45,16 +43,6 @@ class Bomb(pygame.sprite.Sprite):
 
         self.seconds = self.frame_count*2 // self.FRAME_RATE
         self.frame_count += 1
-
-
-
-        '''
-        bomb_fuse = self.seconds - self.seconds_b
-        print(self.seconds)
-        if bomb_fuse > 7:
-            bomb.kill()
-        '''
-
         if self.seconds == 3:
             self.seconds = 0
             self.frame_count = 0
@@ -63,12 +51,13 @@ class Bomb(pygame.sprite.Sprite):
                 self.explode()
         self.image = self.bomb_frames[self.seconds]
 
+
+
     def explode(self):
         player_column = self.rect.centerx // BLOCK_WIDTH
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()
         grid[player_row][player_column] = 3
-
         hitbox.bomb_gone()
 
 

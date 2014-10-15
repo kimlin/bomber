@@ -1,25 +1,27 @@
 __author__ = 'Kim'
 
 
-#importerer pygame
+#importerer pygame/ import pygame
 import pygame
-#importerer alle funksjoner fra "player"
+
+#importerer alle funksjoner fra "player" / imporst all the functions of "player"
 from player import *
-#importerer alle funksjoner fra "constans"
+
+#importerer alle funksjoner fra "constans" / imports all the functions of "Constans"
 from constants import *
 
-
+#klasse "Hardblock"
 class HardBlock(pygame.sprite.Sprite):
 
     def __init__(self):
 
-    # Call the parent class (Sprite) constructor
+    # Kaller på foreldre klassen (Sprite) konstruktoren /Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
 
-        # Load the image
+        # Laster bildet /Load the image
         self.image = hard_block2x
 
-        # Set our transparent color
+        # Setter vår gjennomsiktige farge /Set our transparent color
         self.image.set_colorkey(BLACK)
 
         self.rect = self.image.get_rect()
@@ -29,13 +31,13 @@ class SoftBlock(pygame.sprite.Sprite):
 
     def __init__(self):
 
-    # Call the parent class (Sprite) constructor
+    # Kaller på foreldre klassen (Sprite) konstruktoren /Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
 
-        # Load the image
+        # Laster bildet /Load the image
         self.image = soft_block2x
 
-        # Set our transparent color
+        # Setter vår gjennomsiktige farge / Set our transparent color
         self.image.set_colorkey(BLACK)
 
         self.rect = self.image.get_rect()

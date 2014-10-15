@@ -1,6 +1,11 @@
 __author__ = 'Kim'
+
+
+#importerer pygame
 import pygame
+#importerer alle funksjoner fra "player"
 from player import *
+#importerer alle funksjoner fra "constans"
 from constants import *
 
 

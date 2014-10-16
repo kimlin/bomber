@@ -1,11 +1,11 @@
-__author__ = 'Kim'
+__author__ = 'Linux Gang'
 
 import pygame
 from player import *
 from constants import *
 from blocks import *
 from bomb import *
-
+from explosions import *
 # Call this function so the Pygame library can initialize itself
 pygame.init()
 # Create screen
@@ -21,13 +21,15 @@ hardblock_list = pygame.sprite.Group()
 softblock_list = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 player_list = pygame.sprite.Group()
-player_list = pygame.sprite.Group()
 hitbox_list = pygame.sprite.Group()
 bomb_list = pygame.sprite.Group()
 player_list.add(player)
 hitbox_list.add(hitbox)
 Hitbox.walls = wall_list
 Hitbox.bombs = bomb_list
+
+for i in range (0, 5):
+    print(i)
 
 # Hardblocks
 for column in range(BLOCKS):
@@ -124,6 +126,11 @@ while not done:
                     bomb.rect.y = player_row * BLOCK_WIDTH
                     bomb_list.add(bomb)
                     #hitbox.bomb_gone()
+            if event.key == pygame.K_0:
+                ex = Explosion()
+                ex.rect.x = 32
+                ex.rect.y = 32
+                explosion_list.add(ex)
 
         # Tastetrykk slippes:
         if event.type == pygame.KEYUP:
@@ -161,6 +168,8 @@ while not done:
     hitbox_list.update()
     if len(bomb_list) > 0:
         bomb_list.update()
+    if len(explosion_list) > 0:
+        explosion_list.update()
 
     # Grafikk:
     for column in range(BLOCKS):
@@ -178,6 +187,7 @@ while not done:
     # Sprites:
     all_sprites_list.draw(screen)
     bomb_list.draw(screen)
+    explosion_list.draw(screen)
     player_list.draw(screen)
     #hitbox_list.draw(screen)
     pygame.display.flip()

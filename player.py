@@ -1,4 +1,4 @@
-__author__ = 'Kim'
+__author__ = 'Linux Gang'
 
 import pygame
 from constants import *

@@ -1,9 +1,10 @@
-__author__ = 'Kim'
+__author__ = 'Linux Gang'
 
 import pygame
 from constants import *
 from blocks import *
 from player import *
+from explosions import *
 
 # Det er viktig at import ikke importerer hverandre
 
@@ -14,12 +15,10 @@ class Bomb(pygame.sprite.Sprite):
     frame_count = 0
     FRAME_RATE = 60
     seconds = frame_count // FRAME_RATE
-    seconds_b = seconds
     players = None
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        i = 0
         sheet_start_x = 16
         sheet_start_y = 256
         frame_width = 17
@@ -58,6 +57,10 @@ class Bomb(pygame.sprite.Sprite):
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()
         grid[player_row][player_column] = 3
+        ex = Explosion()
+        ex.rect.x = self.rect.x
+        ex.rect.y = self.rect.y
+        explosion_list.add(ex)
         hitbox.bomb_gone()
 
 

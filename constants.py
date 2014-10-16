@@ -1,4 +1,4 @@
-__author__ = 'Kim'
+__author__ = 'Linux Gang'
 import pygame
 
 
@@ -11,7 +11,7 @@ GRAY = (192, 192, 192)
 BLOCKS = 15  # Should be an odd number, make a try here later!
 BLOCK_WIDTH = 32
 BLOCK_HEIGHT = 32
-CAPTION_NAME = "Kim's Bomberman"
+CAPTION_NAME = "Linux Gang's Bomberman"
 SCREEN_WIDTH = BLOCKS * BLOCK_WIDTH
 SCREEN_HEIGHT = BLOCKS * BLOCK_HEIGHT
 #SpriteSheetBlock Width/Height/Margin

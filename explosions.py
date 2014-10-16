@@ -6,12 +6,13 @@ from blocks import *
 from player import *
 
 explosion_list = pygame.sprite.Group()
-class Explosion(pygame.sprite.Sprite):
+class Explosions(pygame.sprite.Sprite):
 
     mid_frames = []
     frame_count = 0
     FRAME_RATE = 60
     seconds = frame_count // FRAME_RATE
+    i = 0
 
 
     def __init__(self):
@@ -44,3 +45,19 @@ class Explosion(pygame.sprite.Sprite):
             print("dead")
             self.seconds = 0
         self.image = self.mid_frames[self.seconds]
+        hitbox_hit_list = pygame.sprite.spritecollide(self, self.hitbox, False)
+        for hitbox in hitbox_hit_list:
+            bomber = hitbox
+        if len(hitbox_hit_list) > 0:
+            player_hit_list = pygame.sprite.spritecollide(self, self.player, False)
+            for player in player_hit_list:
+                self.seconds = self.frame_count*7 // self.FRAME_RATE
+                self.frame_count += 1
+                if self.seconds == 4:
+                    player.kill()
+                    bomber.die()
+                    self.seconds = 0
+                player.image = player.dying_frames[self.seconds]
+                        #bomber.die()
+
+

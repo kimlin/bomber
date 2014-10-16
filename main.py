@@ -30,6 +30,8 @@ player_list.add(player)
 hitbox_list.add(hitbox)
 Hitbox.walls = wall_list
 Hitbox.bombs = bomb_list
+Explosions.hitbox = hitbox_list
+Explosions.player = player_list
 
 for i in range (0, 5):
     print(i)
@@ -121,14 +123,15 @@ while not done:
             if event.key == pygame.K_SPACE:
                 player_column = hitbox.rect.centerx // BLOCK_WIDTH
                 player_row = hitbox.rect.centery // BLOCK_HEIGHT
-                if grid[player_row][player_column] == 3 and hitbox.bombs_placed < hitbox.max_bombs:
-                    hitbox.bombs_placed += 1
-                    grid[player_row][player_column] = 4
-                    bomb = Bomb()
-                    bomb.rect.x = player_column * BLOCK_HEIGHT
-                    bomb.rect.y = player_row * BLOCK_WIDTH
-                    bomb_list.add(bomb)
-                    #hitbox.bomb_gone()
+                if len(player_list) > 0:
+                    if grid[player_row][player_column] == 3 and hitbox.bombs_placed < hitbox.max_bombs:
+                        hitbox.bombs_placed += 1
+                        grid[player_row][player_column] = 4
+                        bomb = Bomb()
+                        bomb.rect.x = player_column * BLOCK_HEIGHT
+                        bomb.rect.y = player_row * BLOCK_WIDTH
+                        bomb_list.add(bomb)
+                        #hitbox.bomb_gone()
             if event.key == pygame.K_0:
                 ex = Explosion()
                 ex.rect.x = 32

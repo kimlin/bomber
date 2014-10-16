@@ -67,7 +67,7 @@ class Bomb(pygame.sprite.Sprite):
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()
         grid[player_row][player_column] = 3
-        ex = Explosion()
+        ex = Explosions()
         ex.rect.x = self.rect.x
         ex.rect.y = self.rect.y
         explosion_list.add(ex)

@@ -110,10 +110,16 @@ class Hitbox(pygame.sprite.Sprite):
     def bomb_gone(self):
         self.bombs_placed -= 1
 
+    def die(self):
+        self.kill()
+
 
 
 class Player(pygame.sprite.Sprite):
 
+    frame_count = 0
+    FRAME_RATE = 60
+    seconds = frame_count // FRAME_RATE
     # vi setter startverdiene til Player:
     movement_x = 0
     movement_y = 0
@@ -123,6 +129,7 @@ class Player(pygame.sprite.Sprite):
     walking_frames_u = []
     walking_frames_l = []
     walking_frames_r = []
+    dying_frames = []
 
     # Hvilken vei ser spilleren når han starter? D= down
     direction = "D"
@@ -196,6 +203,19 @@ class Player(pygame.sprite.Sprite):
                 frame.set_colorkey(GRAY)
                 frame2x = pygame.transform.scale2x(frame)
                 self.walking_frames_u.append(frame2x)
+        for i in range(16, 20):
+            v = 4
+            if i == 17:
+                v = 3
+            elif i == 18:
+                v = 2
+            elif i == 19:
+                v = 0
+            sprite_sheet.set_clip(sheet_start_x + v + (frame_width+sheet_margin) * i, sheet_start_y, frame_width, frame_height)
+            frame = sprite_sheet.subsurface(sprite_sheet.get_clip())
+            frame.set_colorkey(GRAY)
+            frame2x = pygame.transform.scale2x(frame)
+            self.dying_frames.append(frame2x)
 
         #Set starting frame
         self.image = self.walking_frames_d[1]
@@ -222,6 +242,9 @@ class Player(pygame.sprite.Sprite):
         elif hitbox.direction == "U":
             frame = (pos//30) % len(self.walking_frames_u)
             self.image = self.walking_frames_u[frame]
+
+
+
 
 # Spilleren
 

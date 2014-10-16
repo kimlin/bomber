@@ -7,15 +7,19 @@ from blocks import *
 from bomb import *
 from explosions import *
 # Call this function so the Pygame library can initialize itself
+=======
+
+# Kaller på denne funksjonen sånn at Pygame biblioteket kan starte selv /Call this function so the Pygame library can initialize itself
+
 pygame.init()
-# Create screen
+# Lager  rammen /Create screen
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-# caption name:
+# fanger navn /caption name:
 pygame.display.set_caption(CAPTION_NAME)
-# Create a clock:
+# lager klokke /Create a clock:
 clock = pygame.time.Clock()
 
-#sprite_lists
+#sprite_liste/sprite_lists
 all_sprites_list = pygame.sprite.Group()
 hardblock_list = pygame.sprite.Group()
 softblock_list = pygame.sprite.Group()
@@ -34,14 +38,14 @@ for i in range (0, 5):
 # Hardblocks
 for column in range(BLOCKS):
     for row in range(BLOCKS):
-        # This represents a hardblock
+        # Dette representerer en hardblock/This represents a hardblock
         hardblock = HardBlock()
         column_area = 0 < column < BLOCKS-1
         if not column_area:
-            # Set a random location for the block
+            # Setter en random lokasjon for blokkene/Set a random location for the block
             hardblock.rect.x = column * BLOCK_HEIGHT
             hardblock.rect.y = row * BLOCK_WIDTH
-            # Add the block to the list of objects
+            # Legger til blokkene til listen av objekter /Add the block to the list of objects
             all_sprites_list.add(hardblock)
             hardblock_list.add(hardblock)
             wall_list.add(hardblock)
@@ -64,7 +68,7 @@ for column in range(BLOCKS):
             wall_list.add(hardblock)
             grid[row][column] = 1
 
-# Softblocks, og på slutten settes de ledige plassene til grid value 3
+# Softblocks, og på slutten settes de ledige plassene til grid value 3/ softblocks ,and at the end put the vacancies to the grid value 3
 for column in range(BLOCKS):
     for row in range(BLOCKS):
         softblock = SoftBlock()
@@ -88,7 +92,7 @@ for column in range(BLOCKS):
             grid[row][column] = 3
 
 
-# Main Loop
+# hoved loop /Main Loop
 done = False
 
 while not done:
@@ -101,11 +105,11 @@ while not done:
             row = mouse_position[1] // BLOCK_HEIGHT
             print(mouse_position[0], mouse_position[1])
             print(row, column)
-            #print(player_column, player_row)
+            # print(player_column, player_row)
             print("Grid value = ", grid[row][column])
             hitbox.bomb_gone()
 
-        # Tastetrykk ned:
+        # Tastetrykk ned / Keystroke down :
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 hitbox.go_down()
@@ -132,7 +136,7 @@ while not done:
                 ex.rect.y = 32
                 explosion_list.add(ex)
 
-        # Tastetrykk slippes:
+        # Tastetrykk slippes / Key press release:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 if event.key == pygame.K_DOWN and hitbox.movement_y > 0:
@@ -171,7 +175,7 @@ while not done:
     if len(explosion_list) > 0:
         explosion_list.update()
 
-    # Grafikk:
+    # Grafikk / Graphics:
     for column in range(BLOCKS):
         column_area = 0 < column < BLOCKS-1
         for row in range(BLOCKS):

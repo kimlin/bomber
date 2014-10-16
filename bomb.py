@@ -3,11 +3,15 @@ __author__ = 'Linux Gang'
 import pygame
 from constants import *
 from blocks import *
+
+#Importerer alle funksjoner fra "player"
 from player import *
 from explosions import *
 
-# Det er viktig at import ikke importerer hverandre
+# NB:Det er viktig at import ikke importerer hverandre, husker du hvorfor kim?
 
+
+#klassen "bomb" blir definert her
 class Bomb(pygame.sprite.Sprite):
 
     bomb_frames = []
@@ -17,8 +21,16 @@ class Bomb(pygame.sprite.Sprite):
     seconds = frame_count // FRAME_RATE
     players = None
 
+
     def __init__(self):
+
+        # Kaller på foreldre klassen (Sprite) konstruktoren /Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
+<<<<<<< HEAD
+=======
+
+        i = 0
+>>>>>>> origin/master
         sheet_start_x = 16
         sheet_start_y = 256
         frame_width = 17

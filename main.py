@@ -7,7 +7,6 @@ from blocks import *
 from bomb import *
 from explosions import *
 # Call this function so the Pygame library can initialize itself
-=======
 
 # Kaller på denne funksjonen sånn at Pygame biblioteket kan starte selv /Call this function so the Pygame library can initialize itself
 

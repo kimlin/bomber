@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 __author__ = 'Linux Gang'
-=======
-__author__ = 'Kim'
+
 
 
 #importerer pygame/ import pygame
->>>>>>> origin/master
 import pygame
 
 #importerer alle funksjoner fra "player" / imporst all the functions of "player"

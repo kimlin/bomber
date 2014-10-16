@@ -26,11 +26,9 @@ class Bomb(pygame.sprite.Sprite):
 
         # Kaller på foreldre klassen (Sprite) konstruktoren /Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
-<<<<<<< HEAD
-=======
+
 
         i = 0
->>>>>>> origin/master
         sheet_start_x = 16
         sheet_start_y = 256
         frame_width = 17

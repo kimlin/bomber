@@ -3,12 +3,11 @@ __author__ = 'Linux Gang'
 import pygame
 from constants import *
 from blocks import *
-
-#Importerer alle funksjoner fra "player"
 from player import *
 from explosions import *
 
-# NB:Det er viktig at import ikke importerer hverandre, husker du hvorfor kim?
+# NB:Det er viktig at import ikke importerer hverandre,
+# da vil de importere hverandre i en evig loop og aldri komme ned i koden
 
 
 #klassen "bomb" blir definert her

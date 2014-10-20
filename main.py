@@ -33,8 +33,6 @@ Hitbox.bombs = bomb_list
 Explosions.hitbox = hitbox_list
 Explosions.player = player_list
 
-for i in range (0, 5):
-    print(i)
 
 # Hardblocks
 for column in range(BLOCKS):
@@ -104,11 +102,14 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             column = mouse_position[0] // BLOCK_WIDTH
             row = mouse_position[1] // BLOCK_HEIGHT
-            print(mouse_position[0], mouse_position[1])
-            print(row, column)
+            print("x:", mouse_position[0], "y:", mouse_position[1])
+            print("row:",row, "column:", column)
             # print(player_column, player_row)
             print("Grid value = ", grid[row][column])
-            hitbox.bomb_gone()
+            print("bomb_power:", hitbox.bomb_power)
+
+
+
 
         # Tastetrykk ned / Keystroke down :
         if event.type == pygame.KEYDOWN:
@@ -195,7 +196,7 @@ while not done:
     bomb_list.draw(screen)
     explosion_list.draw(screen)
     player_list.draw(screen)
-    #hitbox_list.draw(screen)
+    hitbox_list.draw(screen)
     pygame.display.flip()
     clock.tick(60)
 

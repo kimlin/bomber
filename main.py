@@ -193,7 +193,7 @@ while not done:
     bomb_list.draw(screen)
     explosion_list.draw(screen)
     player_list.draw(screen)
-    hitbox_list.draw(screen)
+    #hitbox_list.draw(screen)
     pygame.display.flip()
     clock.tick(60)
 

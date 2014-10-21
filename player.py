@@ -6,7 +6,7 @@ from blocks import *
 
 class Hitbox(pygame.sprite.Sprite):
 
-    bomb_power = 2
+    bomb_power = 4
     bombs_placed = 0
     max_bombs = 1
     direction = "D"
@@ -22,8 +22,7 @@ class Hitbox(pygame.sprite.Sprite):
         self.image = pygame.Surface([22, 14])
         self.image.fill(WHITE)
         self.rect = pygame.Rect(BLOCK_WIDTH + 6, BLOCK_HEIGHT + 34, 22, 14)
-        for i in range(self.bomb_power):
-            print(i)
+
 
     def update(self):
         self.rect.x += self.movement_x

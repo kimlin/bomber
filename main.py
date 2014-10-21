@@ -32,6 +32,7 @@ Hitbox.walls = wall_list
 Hitbox.bombs = bomb_list
 Explosions.hitbox = hitbox_list
 Explosions.player = player_list
+Explosions.softblock = softblock_list
 
 
 # Hardblocks
@@ -66,6 +67,7 @@ for column in range(BLOCKS):
             hardblock_list.add(hardblock)
             wall_list.add(hardblock)
             grid[row][column] = 1
+
 
 # Softblocks, og på slutten settes de ledige plassene til grid value 3/ softblocks ,and at the end put the vacancies to the grid value 3
 for column in range(BLOCKS):
@@ -133,11 +135,6 @@ while not done:
                         bomb.rect.y = player_row * BLOCK_WIDTH
                         bomb_list.add(bomb)
                         #hitbox.bomb_gone()
-            if event.key == pygame.K_0:
-                ex = Explosion()
-                ex.rect.x = 32
-                ex.rect.y = 32
-                explosion_list.add(ex)
 
         # Tastetrykk slippes / Key press release:
         if event.type == pygame.KEYUP:

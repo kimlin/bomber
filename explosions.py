@@ -1,5 +1,18 @@
 __author__ = 'Linux Gang'
 
+'''
+eksplosjons grafikken:
+#######################
+    0
+    1
+    1
+ 2334556
+    7
+    7
+    8
+#######################
+'''
+
 import pygame
 from constants import *
 from blocks import *
@@ -23,8 +36,9 @@ class Explosions(pygame.sprite.Sprite):
     i = 0
 
 
-    def __init__(self):
+    def __init__(self, direction):
         pygame.sprite.Sprite.__init__(self)
+        self.direction = direction
         x_frames = [185, 266, 349, 434, 518]
         sheet_start_y = 290
         frame_width = 16
@@ -98,9 +112,26 @@ class Explosions(pygame.sprite.Sprite):
         self.frame_count += 1
         if self.seconds == 5:
             self.kill()
-            print("dead")
             self.seconds = 0
-        self.image = self.left_frames[self.seconds]
+        if self.direction == 0:
+            self.image = self.top_frames[self.seconds]
+        elif self.direction == 1:
+            self.image = self.vert_frames_t[self.seconds]
+        elif self.direction == 2:
+            self.image = self.left_frames[self.seconds]
+        elif self.direction == 3:
+            self.image = self.hor_frames_l[self.seconds]
+        elif self.direction == 4:
+            self.image = self.mid_frames[self.seconds]
+        elif self.direction == 5:
+            self.image = self.hor_frames_r[self.seconds]
+        elif self.direction == 6:
+            self.image = self.right_frames[self.seconds]
+        elif self.direction == 7:
+            self.image = self.vert_frames_b[self.seconds]
+        elif self.direction == 8:
+            self.image = self.bot_frames[self.seconds]
+
         hitbox_hit_list = pygame.sprite.spritecollide(self, self.hitbox, False)
         for hitbox in hitbox_hit_list:
             bomber = hitbox
@@ -115,5 +146,12 @@ class Explosions(pygame.sprite.Sprite):
                     self.seconds = 0
                 player.image = player.dying_frames[self.seconds]
                         #bomber.die()
+
+        softblock_hit_list = pygame.sprite.spritecollide(self, self.softblock, True)
+        for softblock in softblock_hit_list:
+            row = (softblock.rect.y // BLOCK_HEIGHT)
+            column = (softblock.rect.x // BLOCK_WIDTH)
+            grid[row][column] = 3
+
 
 

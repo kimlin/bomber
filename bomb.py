@@ -13,6 +13,10 @@ from explosions import *
 #klassen "bomb" blir definert her
 class Bomb(pygame.sprite.Sprite):
 
+    l = 1
+    r = 1
+    d = 1
+    u = 1
     bomb_frames = []
     tick = 0
     frame_count = 0
@@ -65,11 +69,63 @@ class Bomb(pygame.sprite.Sprite):
         player_column = self.rect.centerx // BLOCK_WIDTH
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()
-        grid[player_row][player_column] = 3
-        ex = Explosions()
+        grid[player_row][player_column] = 3  # Denne linjen gjør at vi kan legge bomber her igjen
+        ex = Explosions(4)
         ex.rect.x = self.rect.x
         ex.rect.y = self.rect.y
         explosion_list.add(ex)
+        while self.l <= hitbox.bomb_power and grid[player_row][player_column + self.l] != 1:
+            if self.l == hitbox.bomb_power:
+                ex = Explosions(6)
+                ex.rect.x = self.rect.x + (self.l * BLOCK_WIDTH)
+                ex.rect.y = self.rect.y
+                explosion_list.add(ex)
+                self.l += 1
+            else:
+                ex = Explosions(5)
+                ex.rect.x = self.rect.x + (self.l * BLOCK_WIDTH)
+                ex.rect.y = self.rect.y
+                explosion_list.add(ex)
+                self.l += 1
+        while self.r <= hitbox.bomb_power and grid[player_row][player_column - self.r] != 1:
+            if self.r == hitbox.bomb_power:
+                ex = Explosions(2)
+                ex.rect.x = self.rect.x - (self.r * BLOCK_WIDTH)
+                ex.rect.y = self.rect.y
+                explosion_list.add(ex)
+                self.r += 1
+            else:
+                ex = Explosions(3)
+                ex.rect.x = self.rect.x - (self.r * BLOCK_WIDTH)
+                ex.rect.y = self.rect.y
+                explosion_list.add(ex)
+                self.r += 1
+        while self.d <= hitbox.bomb_power and grid[player_row + self.d][player_column] != 1:
+            if self.d == hitbox.bomb_power:
+                ex = Explosions(8)
+                ex.rect.x = self.rect.x
+                ex.rect.y = self.rect.y + (self.d * BLOCK_HEIGHT)
+                explosion_list.add(ex)
+                self.d += 1
+            else:
+                ex = Explosions(7)
+                ex.rect.x = self.rect.x
+                ex.rect.y = self.rect.y + (self.d * BLOCK_HEIGHT)
+                explosion_list.add(ex)
+                self.d += 1
+        while self.u <= hitbox.bomb_power and grid[player_row - self.u][player_column] != 1:
+            if self.u == hitbox.bomb_power:
+                ex = Explosions(0)
+                ex.rect.x = self.rect.x
+                ex.rect.y = self.rect.y - (self.u * BLOCK_HEIGHT)
+                explosion_list.add(ex)
+                self.u += 1
+            else:
+                ex = Explosions(1)
+                ex.rect.x = self.rect.x
+                ex.rect.y = self.rect.y - (self.u * BLOCK_HEIGHT)
+                explosion_list.add(ex)
+                self.u += 1
         hitbox.bomb_gone()
 
 

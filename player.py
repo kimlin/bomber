@@ -6,7 +6,7 @@ from blocks import *
 
 class Hitbox(pygame.sprite.Sprite):
 
-    bomb_power = 4
+    bomb_power = 1 # Hvor mange "soft blocks" bomben ødelegger. Sto på 4
     bombs_placed = 0
     max_bombs = 1
     direction = "D"

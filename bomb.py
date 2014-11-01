@@ -66,6 +66,7 @@ class Bomb(pygame.sprite.Sprite):
 
 
     def explode(self):
+        bomb_sound.play()
         player_column = self.rect.centerx // BLOCK_WIDTH
         player_row = self.rect.centery // BLOCK_HEIGHT
         self.kill()

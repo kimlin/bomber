@@ -32,7 +32,7 @@ for row in range(BLOCKS):
         # Add a the number zero to the current row
         grid[row].append(0)
 
-
+pygame.init()
 ######################################################################
 
 # sprite sheet for map
@@ -53,3 +53,6 @@ for i in range(4):
     elif i == 3:
         field = bomberman_sheet.subsurface(bomberman_sheet.get_clip())
         field2x = pygame.transform.scale2x(field)
+######################################################################
+# Sounds
+bomb_sound = pygame.mixer.Sound("blast.wav")
